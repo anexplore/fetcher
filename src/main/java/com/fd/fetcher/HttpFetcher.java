@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.net.ssl.HostnameVerifier;
+
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -28,9 +30,10 @@ import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.conn.util.PublicSuffixMatcher;
+import org.apache.http.conn.util.PublicSuffixMatcherLoader;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
@@ -40,6 +43,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.ByteArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
@@ -89,8 +93,9 @@ public class HttpFetcher {
 		HttpClientBuilder builder = HttpClients.custom();
 		builder.setDefaultRequestConfig(defaultRequestCfg);
 		LayeredConnectionSocketFactory sslSocketFactory = null;
+		PublicSuffixMatcher publicSuffixMatcherCopy = PublicSuffixMatcherLoader.getDefault();
 		if (sslSocketFactory == null) {
-			X509HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
+			HostnameVerifier hostnameVerifier = new DefaultHostnameVerifier(publicSuffixMatcherCopy);
 			sslSocketFactory = new SSLConnectionSocketFactory(
 					SSLContexts.createDefault(), hostnameVerifier);
 		}
@@ -386,7 +391,7 @@ public class HttpFetcher {
 	public void setAllowCookies(boolean allowCookies) {
 		this.allowCookies = allowCookies;
 		if (this.allowCookies) {
-			cookieSpecs = CookieSpecs.BROWSER_COMPATIBILITY;
+			cookieSpecs = CookieSpecs.STANDARD;
 		}
 	}
 
