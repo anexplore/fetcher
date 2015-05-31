@@ -1,5 +1,8 @@
 package com.fd.fetcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpUriRequest;
 /**
@@ -62,4 +65,17 @@ public class HttpResponseWrapper {
 		this.realUrl = realUrl;
 	}
 
+	public List<String> getHeader(String key) {
+		if (headers == null || key == null) {
+			return null;
+		}
+		List<String> res = new ArrayList<String>();
+		for (int i = 0; i < headers.length; i++) {
+			Header header = headers[i];
+			if (header.getName().equalsIgnoreCase(key)) {
+				res.add(header.getValue());
+			}
+		}
+		return res;
+	}
 }

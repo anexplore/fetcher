@@ -2,8 +2,10 @@ package com.fd.fetcher;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.apache.http.conn.DnsResolver;
-import com.fd.DnsCache;
+
+import com.fd.dnscache.DnsCache;
 
 /**
  * DnsResolver with simplecache
@@ -14,7 +16,7 @@ import com.fd.DnsCache;
 
 public class DnsResolverWithCache implements DnsResolver {
 	private DnsCache cache;
-
+	
 	public DnsResolverWithCache(DnsCache cache) {
 		this.cache = cache;
 	}

@@ -47,7 +47,7 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.ByteArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
-import com.fd.DnsCache;
+import com.fd.dnscache.DnsCache;
 
 /**
  * HttpFetcher 提供HttpGet HttpPost方法 自动解压gzip 设置KeepAlive,proxy,redirect,dnscache
@@ -269,9 +269,7 @@ public class HttpFetcher {
 					EntityUtils.consumeQuietly(response.getEntity());
 					throw new ClientProtocolException(
 							"Unexpected response status: "
-									+ status
-									+ finalWrapper.getLastRequest()
-											.getRequestLine().getUri());
+									+ status);
 				}
 			}
 

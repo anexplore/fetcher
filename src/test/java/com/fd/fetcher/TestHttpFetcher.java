@@ -27,7 +27,7 @@ public class TestHttpFetcher extends TestCase {
 	}
 	
 	public void testHttpHead() throws ClientProtocolException, IOException {
-		String url = "http://www.baidu.com";
+		String url = "http://180.97.33.107";
 		HttpResponseWrapper wrapper = fetcher.sendHttpHead(url, null);
 		assertNotNull(wrapper);
 		Header[]  headers = wrapper.getAllHeader();
